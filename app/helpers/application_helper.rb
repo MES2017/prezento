@@ -15,8 +15,8 @@ module ApplicationHelper
   # method used to map locale route into flag name
   def map_locale(locale)
     mapped_locales = {
-      "en": "us",
-      "pt": "br"
+      "en" => "us",
+      "pt" => "br"
     }
 
     mapped_locales[locale]
