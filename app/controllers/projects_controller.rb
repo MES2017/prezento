@@ -11,9 +11,6 @@ class ProjectsController < ApplicationController
     @project = Project.new
   end
 
-  def fetch_image_url
-    @image_url = project_params.delete(:image_url)
-  end
   # GET /projects
   # GET /projects.json
   def index
@@ -84,5 +81,9 @@ class ProjectsController < ApplicationController
       format.html { render action: 'new' }
       format.json { render json: @project.likeno_errors, status: :unprocessable_entity }
     end
+  end
+  
+  def fetch_image_url
+    @image_url = project_params.delete(:image_url)
   end
 end

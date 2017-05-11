@@ -61,7 +61,6 @@ describe ProjectsController, :type => :controller do
       end
 
       it { is_expected.to render_template(:new) }
-
     end
   end
 
