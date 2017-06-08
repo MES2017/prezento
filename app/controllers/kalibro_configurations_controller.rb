@@ -73,30 +73,16 @@ class KalibroConfigurationsController < ApplicationController
     params[:kalibro_configuration]
   end
 
-
-  def redirect_on_successful_save(format)
-    message = 'successfully_created'
-    record = @kalibro_configuration.model_name.human
-    format.html { 
-      redirect_to kalibro_configuration_path(@kalibro_configuration.id), notice: t(message, :record => record ) 
-    }
-    format.json { 
-      render action: 'show', status: :created, location: @kalibro_configuration 
-    }
-  end
-
-  def redirect_on_failed_save(format)
-    format.html { render action: 'new' }
-    format.json { render json: @kalibro_configuration.likeno_errors, status: :unprocessable_entity }
-  end
-
   # Extracted code from create action
   def create_and_redir(format)
     if @kalibro_configuration.save
       current_user.kalibro_configuration_attributes.create(kalibro_configuration_id: @kalibro_configuration.id)
-      redirect_on_successful_save(format)
+
+      format.html { redirect_to kalibro_configuration_path(@kalibro_configuration.id), notice: t('successfully_created', :record => @kalibro_configuration.model_name.human) }
+      format.json { render action: 'show', status: :created, location: @kalibro_configuration }
     else
-      redirect_on_failed_save(format)
+      format.html { render action: 'new' }
+      format.json { render json: @kalibro_configuration.likeno_errors, status: :unprocessable_entity }
     end
   end
 end
