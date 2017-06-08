@@ -1,4 +1,5 @@
 include OwnershipAuthentication
+include ComunsMethods
 
 class KalibroConfigurationsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
@@ -21,7 +22,7 @@ class KalibroConfigurationsController < ApplicationController
   def create
     @kalibro_configuration = KalibroConfiguration.new(kalibro_configuration_params)
     respond_to do |format|
-      create_and_redir(format)
+      create_and_redir(format, @kalibro_configuration, 'kalibro_configuration')
     end
   end
 
@@ -71,18 +72,5 @@ class KalibroConfigurationsController < ApplicationController
   def kalibro_configuration_params
     params[:kalibro_configuration][:name].strip!
     params[:kalibro_configuration]
-  end
-
-  # Extracted code from create action
-  def create_and_redir(format)
-    if @kalibro_configuration.save
-      current_user.kalibro_configuration_attributes.create(kalibro_configuration_id: @kalibro_configuration.id)
-
-      format.html { redirect_to kalibro_configuration_path(@kalibro_configuration.id), notice: t('successfully_created', :record => @kalibro_configuration.model_name.human) }
-      format.json { render action: 'show', status: :created, location: @kalibro_configuration }
-    else
-      format.html { render action: 'new' }
-      format.json { render json: @kalibro_configuration.likeno_errors, status: :unprocessable_entity }
-    end
   end
 end

@@ -1,4 +1,5 @@
 include OwnershipAuthentication
+include ComunsMethods
 
 class ReadingGroupsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
@@ -21,7 +22,7 @@ class ReadingGroupsController < ApplicationController
   def create
     @reading_group = ReadingGroup.new(reading_group_params)
     respond_to do |format|
-      create_and_redir(format)
+      create_and_redir(format, @reading_group, 'reading_group')
     end
   end
 
@@ -62,18 +63,5 @@ class ReadingGroupsController < ApplicationController
   def reading_group_params
     params[:reading_group][:name].strip!
     params[:reading_group]
-  end
-
-  # Extracted code from create action
-  def create_and_redir(format)
-    if @reading_group.save
-      current_user.reading_group_attributes.create(reading_group_id: @reading_group.id)
-
-      format.html { redirect_to reading_group_path(@reading_group.id), notice: t('successfully_created', :record => t(@reading_group.class)) }
-      format.json { render action: 'show', status: :created, location: @reading_group }
-    else
-      format.html { render action: 'new' }
-      format.json { render json: @reading_group.likeno_errors, status: :unprocessable_entity }
-    end
   end
 end
